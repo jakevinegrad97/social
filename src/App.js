@@ -1,25 +1,60 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
+import Posts from './components/Posts';
+import AddStatus from './components/AddStatus';
 
 class App extends Component {
+
+state = {
+  posts: [
+    {
+      id: 1,
+      person: 'Jake',
+      content: 'Like for an inbox',
+      likes: 132,
+      isLiked: false
+    },
+    {
+      id: 2,
+      person: 'Alex',
+      content: 'I love Basford Bank',
+      likes: 0,
+      isLiked: false
+    },
+    {
+      id: 3,
+      person: 'Tabatha',
+      content: 'Just been on the bus (;',
+      likes: 5,
+      isLiked: false
+    }
+  ]
+}
+
+handleLike = post => {
+ const posts = [...this.state.posts];
+ const index = posts.indexOf(post);
+ if(posts[index].isLiked){
+   posts[index].likes--;
+ } else {
+   posts[index].likes++;
+ }
+ posts[index].isLiked = !posts[index].isLiked;
+ this.setState({posts});
+}
+
+handleSubmit = status => {
+  const posts = [...this.state.posts];
+  posts.push({id: 4, person: 'Jake', content: status, likes: 0, isLiked: false})
+  this.setState({posts});
+}
+
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+        <Posts posts={this.state.posts} onLike={this.handleLike} />
+        <AddStatus onSubmit={this.handleSubmit}/>
+        <hr />
       </div>
     );
   }
